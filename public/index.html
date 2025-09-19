@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Military Logistics Dashboard</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h1>🚀 MLMS Dashboard</h1>
+    <div>
+      <h2>Inventory</h2>
+      <ul id="inventory"></ul>
+    </div>
+    <div>
+      <h2>Vehicles</h2>
+      <ul id="vehicles"></ul>
+    </div>
+
+    <script>
+      const socket = io("http://localhost:8000");
+
+      const inventoryList = document.getElementById("inventory");
+      const vehiclesList = document.getElementById("vehicles");
+
+      socket.on("inventory_update", (data) => {
+        const li = document.createElement("li");
+        li.textContent = `${data.name}: ${data.qty}`;
+        inventoryList.appendChild(li);
+      });
+
+      socket.on("vehicle_ping", (data) => {
+        const li = document.createElement("li");
+        li.textContent = `${data.id} → [${data.lat.toFixed(
+          4
+        )}, ${data.lon.toFixed(4)}]`;
+        vehiclesList.appendChild(li);
+      });
+    </script>
+  </body>
+</html>
