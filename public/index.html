@@ -1,39 +1,61 @@
+<!-- public/index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Military Logistics Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MLMS Dashboard</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <h1>🚀 MLMS Dashboard</h1>
-    <div>
-      <h2>Inventory</h2>
-      <ul id="inventory"></ul>
+    <h1>🪖 Military Logistics Management Dashboard</h1>
+
+    <div id="dashboard">
+      <!-- Left column -->
+      <div class="panel">
+        <h3>📦 Supplies</h3>
+        <ul id="inventoryList"></ul>
+        <canvas id="supplyChart" width="300" height="200"></canvas>
+
+        <button id="loadDataBtn">📦 Load Stored Data</button>
+
+        <h4>Add Supply</h4>
+        <input id="supplyName" placeholder="Name" />
+        <input id="supplyQty" type="number" placeholder="Qty" />
+        <input id="supplyUnit" placeholder="Unit" />
+        <button id="addSupplyBtn">➕ Add Supply</button>
+      </div>
+
+      <!-- Center column -->
+      <div class="panel">
+        <h3>🌍 Map</h3>
+        <div id="map"></div>
+        <button id="optimizeBtn">🚀 Optimize Distribution</button>
+      </div>
+
+      <!-- Right column -->
+      <div class="panel">
+        <h3>🚛 Vehicles</h3>
+        <ul id="vehiclesList"></ul>
+        <canvas id="vehicleChart" width="300" height="200"></canvas>
+
+        <h4>Add Vehicle</h4>
+        <input id="vehicleId" placeholder="ID" />
+        <input id="vehicleLat" type="number" step="0.0001" placeholder="Lat" />
+        <input id="vehicleLon" type="number" step="0.0001" placeholder="Lon" />
+        <button id="addVehicleBtn">➕ Add Vehicle</button>
+
+        <h3>⚠️ Alerts</h3>
+        <ul id="alertsList"></ul>
+      </div>
     </div>
-    <div>
-      <h2>Vehicles</h2>
-      <ul id="vehicles"></ul>
-    </div>
 
-    <script>
-      const socket = io("http://localhost:8000");
-
-      const inventoryList = document.getElementById("inventory");
-      const vehiclesList = document.getElementById("vehicles");
-
-      socket.on("inventory_update", (data) => {
-        const li = document.createElement("li");
-        li.textContent = `${data.name}: ${data.qty}`;
-        inventoryList.appendChild(li);
-      });
-
-      socket.on("vehicle_ping", (data) => {
-        const li = document.createElement("li");
-        li.textContent = `${data.id} → [${data.lat.toFixed(
-          4
-        )}, ${data.lon.toFixed(4)}]`;
-        vehiclesList.appendChild(li);
-      });
-    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
